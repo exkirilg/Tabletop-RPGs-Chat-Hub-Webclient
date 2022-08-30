@@ -14,6 +14,7 @@ export function useEstablishConnection() {
         const tryConnect = async () => {
             try {
                 dispatch(setConnection(await establishConnection()));
+                dispatch(setFailed(false));
             }
             catch (e) {
                 console.log(e);
