@@ -1,11 +1,9 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-
+import appsettings from "../../appsettings.json";
 import { Container, Nav, Navbar, Stack } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Chat, ChatDots } from "react-bootstrap-icons";
-
-const QuickLinksMaxNumber = 5;
 
 const NavigationBar = () => {
 
@@ -14,7 +12,7 @@ const NavigationBar = () => {
     const quickLinks = () => {
         let result = [];
 
-        for (let i = 0; i < QuickLinksMaxNumber && i < activeChats.length; i++) {
+        for (let i = 0; i < appsettings.MaxNumberOfQuickLinksInNavBar && i < activeChats.length; i++) {
             result.push(
                 <LinkContainer to={`rooms/${activeChats[i].getName()}`} className="text-decoration-none" key={i}>
                     <Nav.Link>
