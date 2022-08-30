@@ -3,12 +3,14 @@ const Chat = class {
     #name;
     #members;
     #messages;
+    #hasUnreadMessages;
 
-    constructor(id, name, members = [], messages = []) {
+    constructor(id, name, members = [], messages = [], hasUnreadMessages = false) {
         this.#id = id;
         this.#name = name;
         this.#members = members;
         this.#messages = messages;
+        this.#hasUnreadMessages = hasUnreadMessages
     }
 
     getId() {
@@ -34,6 +36,13 @@ const Chat = class {
     }
     addMessage(msg) {
         this.#messages = [...this.#messages, msg].sort((a, b) => a.compare(b));
+    }
+
+    getHasUnreadMessages() {
+        return this.#hasUnreadMessages;
+    }
+    setHasUnreadMessages(value) {
+        this.#hasUnreadMessages = value;
     }
 
     compare(otherChat) {

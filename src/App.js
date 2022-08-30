@@ -3,7 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { useSelector } from "react-redux";
 import { useEstablishConnection } from "./services/ConnectionServices";
+import { Route, Routes } from "react-router-dom";
 
+import HomePage from "./pages/HomePage";
 import { Row } from "react-bootstrap";
 
 const App = () => {
@@ -14,7 +16,7 @@ const App = () => {
   
     return (
         <div className="App">
-            
+
             {
                 !connection && !connectionFailed &&
                 <Row className="d-flex justify-content-center">
@@ -28,6 +30,13 @@ const App = () => {
                     <h3>Sorry, connection cannot be established.</h3>
                     <h3>Please try again later.</h3>
                 </div>
+            }
+            
+            {
+                connection &&
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                </Routes>
             }
         
         </div>
