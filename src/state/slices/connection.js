@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    value: null
+    value: null,
+    failed: false
 }
 
 const connection = createSlice({
@@ -10,10 +11,13 @@ const connection = createSlice({
     reducers: {
         setConnection: (state, action) => {
             state.value = action.payload;
+        },
+        setFailed: (state, action) => {
+            state.failed = action.payload;
         }
     }
 })
 
-export const { setConnection } = connection.actions;
+export const { setConnection, setFailed } = connection.actions;
 
 export default connection.reducer;
