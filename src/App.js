@@ -2,15 +2,21 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { useSelector } from "react-redux";
+import { useRestoreIdentity } from "./services/IdentityServices";
 import { useEstablishConnection } from "./services/ConnectionServices";
 import { Route, Routes } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
+import SignInPage from "./pages/SignInPage";
+import SignUpPage from "./pages/SignUpPage";
+
 import { Row } from "react-bootstrap";
 
 const App = () => {
 
+    useRestoreIdentity();
     useEstablishConnection();
+    
     const connection = useSelector(state => state.connection.value);
     const connectionFailed = useSelector(state => state.connection.failed);
   
@@ -36,6 +42,8 @@ const App = () => {
                 connection &&
                 <Routes>
                     <Route path="/" element={<HomePage />} />
+                    <Route path="/signin" element={<SignInPage />} />
+                    <Route path="/signup" element={<SignUpPage />} />
                 </Routes>
             }
         

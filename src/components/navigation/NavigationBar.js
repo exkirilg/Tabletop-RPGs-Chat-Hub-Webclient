@@ -1,12 +1,19 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import appsettings from "../../appsettings.json";
-import { Container, Nav, Navbar, Stack } from "react-bootstrap";
+import { setIsAuthenticated, setToken, setName } from "../../state/slices/identity";
+import { Button, Container, Nav, Navbar, Stack } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { Chat, ChatDots } from "react-bootstrap-icons";
+import { Chat, ChatDots, PersonCircle } from "react-bootstrap-icons";
 
 const NavigationBar = () => {
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const isAuthenticated = useSelector(state => state.identity.isAuthenticated);
+    const username = useSelector(state => state.identity.name);
     const activeChats = useSelector(state => state.activeChats.value);
 
     const quickLinks = () => {
@@ -30,12 +37,29 @@ const NavigationBar = () => {
         return result;
     }
 
+    const handleSignout = () => {
+        dispatch(setIsAuthenticated(false));
+        dispatch(setToken(""));
+        dispatch(setName(""));
+
+        localStorage.removeItem("identity");
+
+        navigate("/");
+    }
+
     return (
         <Navbar bg="light" expand="lg" className="shadow-sm">
             <Container>
 
             <Link to="/" className="text-decoration-none">
-                <Navbar.Brand>Tabletop RPGs Chat-Hub</Navbar.Brand>
+                <Stack>
+                    <Navbar.Brand className="p-0">Tabletop RPGs Chat-Hub</Navbar.Brand>
+
+                    <Stack direction="horizontal" gap={3}>
+                        <Navbar.Text className="p-0">Chats: 0</Navbar.Text>
+                        <Navbar.Text className="p-0">Users: 0</Navbar.Text>
+                    </Stack>
+                </Stack>
             </Link>
 
             {
@@ -50,11 +74,34 @@ const NavigationBar = () => {
                 </>
             }
 
-            <Navbar.Collapse className="text-end">
-                <Stack>
-                    <Navbar.Text className="p-0">Chats: 0</Navbar.Text>
-                    <Navbar.Text className="p-0">Members: 0</Navbar.Text>
+            <Navbar.Collapse className="justify-content-end">
+
+                <Stack direction="horizontal" gap={3} className="justify-content-end">
+                {
+                    isAuthenticated ?
+                    (
+                        <>
+                            <Navbar.Text>
+                                <PersonCircle className="me-2 mb-1" size={24} />Hi, <span className="link-dark">{username}</span>
+                            </Navbar.Text>
+                            <Button variant="btn btn-outline-danger" onClick={handleSignout}>Sign out</Button>
+                        </>
+                    )
+                    :
+                    (
+                        <>
+                            <Link to="/signup">
+                                <span className="btn btn-outline-primary">Sign up</span>
+                            </Link>
+                            <Link to="/signin">
+                                <span className="btn btn-outline-primary">Sign in</span>
+                            </Link>
+                        </>
+                    )
+                }
                 </Stack>
+
+                
             </Navbar.Collapse>
 
             </Container>

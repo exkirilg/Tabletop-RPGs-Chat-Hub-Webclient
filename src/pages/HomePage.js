@@ -1,6 +1,5 @@
-import Container from "react-bootstrap/esm/Container";
-
 import NavigationBar from "../components/navigation/NavigationBar";
+import { Container } from "react-bootstrap";
 
 const HomePage = () => {
     return (
