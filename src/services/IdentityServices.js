@@ -78,7 +78,7 @@ export async function signup ({email, name, password, passwordConfirmation}) {
     }
     else if (body !== null) {
         try {
-            result.systemMessage = body.Email[0];
+            result.systemMessage = body.errors.Authentication[0];
         } catch {}
     }
 
