@@ -6,6 +6,7 @@ import Chat from "../models/Chat";
 
 import appsettings from "../appsettings.json";
 import { setConnection, setFailed } from "../state/slices/connection";
+import { setStatistics } from "../state/slices/statistics";
 import { setChats } from "../state/slices/chats";
 
 export function useEstablishConnection() {
@@ -40,7 +41,14 @@ export function useEstablishConnection() {
         }
 
         const configureConnection = async (connection) => {
+            connection.on(appsettings.ClientMethods.ReceiveStatisticsMethod, (statistics) => handleStatisticsReceived(statistics));
             connection.on(appsettings.ClientMethods.ReceiveChatsInfoMethod, (chatsInfo) => handleChatsInfoReceived(chatsInfo));
+        }
+
+        const handleStatisticsReceived = (statistics) => {
+            dispatch(
+                setStatistics(statistics)
+            );
         }
 
         const handleChatsInfoReceived = (chatsInfo) => {
@@ -59,14 +67,18 @@ export function useEstablishConnection() {
     
     }, [connection, dispatch])
 
-    // Active chats request
+    // Requests on connection
     useEffect(() => {
 
         if (connection) {
+            
+            connection.invoke(appsettings.ChatHubMethods.StatisticsRequestMethod);
+            
             connection.invoke(
                 appsettings.ChatHubMethods.ChatsInfoRequestMethod,
                 Number(appsettings.MaxNumberOfChatsDisplayed), null
-            )
+            );
+
         }
 
     }, [connection])

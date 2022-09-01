@@ -15,6 +15,8 @@ const NavigationBar = () => {
     const isAuthenticated = useSelector(state => state.identity.isAuthenticated);
     const username = useSelector(state => state.identity.name);
     const activeChats = useSelector(state => state.activeChats.value);
+    const statisticsChats = useSelector(state => state.statistics.chats);
+    const statisticsUsers = useSelector(state => state.statistics.users);
 
     const links = (quickLinks = false) => {
         let result = [];
@@ -59,8 +61,8 @@ const NavigationBar = () => {
                     <Navbar.Brand className="p-0">Tabletop RPGs Chat-Hub</Navbar.Brand>
 
                     <Stack direction="horizontal" gap={3}>
-                        <Navbar.Text className="p-0">Chats: 0</Navbar.Text>
-                        <Navbar.Text className="p-0">Users: 0</Navbar.Text>
+                        <Navbar.Text className="p-0">Chats: {statisticsChats}</Navbar.Text>
+                        <Navbar.Text className="p-0">Users: {statisticsUsers}</Navbar.Text>
                     </Stack>
                 </Stack>
             </Link>
