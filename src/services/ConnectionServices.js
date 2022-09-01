@@ -6,7 +6,7 @@ import Chat from "../models/Chat";
 
 import appsettings from "../appsettings.json";
 import { setConnection, setFailed } from "../state/slices/connection";
-import { setChats } from "../state/slices/activeChats";
+import { setChats } from "../state/slices/chats";
 
 export function useEstablishConnection() {
     const dispatch = useDispatch();

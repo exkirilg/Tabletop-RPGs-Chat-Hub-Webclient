@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import appsettings from "../../appsettings.json";
 import { setIsAuthenticated, setToken, setName } from "../../state/slices/identity";
-import { Button, Container, Nav, Navbar, Stack } from "react-bootstrap";
+import { Button, Container, Nav, Navbar, NavDropdown, Stack } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Chat, ChatDots, PersonCircle } from "react-bootstrap-icons";
 
@@ -16,12 +16,15 @@ const NavigationBar = () => {
     const username = useSelector(state => state.identity.name);
     const activeChats = useSelector(state => state.activeChats.value);
 
-    const quickLinks = () => {
+    const links = (quickLinks = false) => {
         let result = [];
 
-        for (let i = 0; i < appsettings.MaxNumberOfQuickLinksInNavBar && i < activeChats.length; i++) {
+        let i = quickLinks ? 0 : appsettings.MaxNumberOfQuickLinksInNavBar;
+        let count = quickLinks ? Math.min(appsettings.MaxNumberOfQuickLinksInNavBar, activeChats.length) : activeChats.length;
+
+        for (i; i < count; i++) {
             result.push(
-                <LinkContainer to={`rooms/${activeChats[i].getName()}`} className="text-decoration-none" key={i}>
+                <LinkContainer to={`rooms/${activeChats[i].getName()}`} className="text-decoration-none px-3" key={i}>
                     <Nav.Link>
                         <span>{activeChats[i].getName()}</span>
                         {
@@ -68,7 +71,14 @@ const NavigationBar = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        {quickLinks()}
+                        {links(true)}
+
+                        {
+                            activeChats.length > appsettings.MaxNumberOfQuickLinksInNavBar &&
+                            <NavDropdown title="other..." className="px-3 mb-3">
+                                {links()}
+                            </NavDropdown>
+                        }
                     </Nav>
                 </Navbar.Collapse>
                 </>
