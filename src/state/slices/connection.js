@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     value: null,
-    failed: false
+    processing: false,
+    failed: false,
+    isAuthenticated: false
 }
 
 const connection = createSlice({
@@ -12,12 +14,18 @@ const connection = createSlice({
         setConnection: (state, action) => {
             state.value = action.payload;
         },
+        setProcessing: (state, action) => {
+            state.processing = action.payload;
+        },
         setFailed: (state, action) => {
             state.failed = action.payload;
+        },
+        setIsAuthenticated: (state, action) => {
+            state.isAuthenticated = action.payload;
         }
     }
 })
 
-export const { setConnection, setFailed } = connection.actions;
+export const { setConnection, setProcessing, setFailed, setIsAuthenticated } = connection.actions;
 
 export default connection.reducer;

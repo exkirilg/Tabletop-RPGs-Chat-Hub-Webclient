@@ -2,8 +2,10 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import connectionReducer from "./slices/connection";
 import identityReducer from "./slices/identity";
 import statisticsReducer from "./slices/statistics";
-import activeChatsReducer from "./slices/activeChats";
+
 import chatsReducer from "./slices/chats";
+import ownChatsReducer from "./slices/ownChats";
+import activeChatsReducer from "./slices/activeChats";
 
 export default configureStore({
     reducer:
@@ -12,6 +14,7 @@ export default configureStore({
             identity: identityReducer,
             statistics: statisticsReducer,
             chats: chatsReducer,
+            ownChats: ownChatsReducer,
             activeChats: activeChatsReducer
         }),
     middleware: getDefaultMiddleware =>

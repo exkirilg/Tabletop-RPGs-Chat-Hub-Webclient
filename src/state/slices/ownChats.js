@@ -4,24 +4,24 @@ const initialState = {
     value: []
 }
 
-const activeChats = createSlice({
-    name: "activeChats",
+const ownChats = createSlice({
+    name: "ownChats",
     initialState,
     reducers: {
-        setActiveChats: (state, action) => {
+        setOwnChats: (state, action) => {
             state.value = action.payload;
         },
-        addActiveChat: (state, action) => {
+        addOwnChat: (state, action) => {
             if (state.value.filter(chat => chat.getId() === action.payload.getId()).length === 0) {
                 state.value = [...state.value, action.payload].sort((a, b) => a.compare(b));
             }
         },
-        removeActiveChat: (state, action) => {
+        removeOwnChat: (state, action) => {
             state.value = state.value.filter(chat => chat.getId() !== action.payload);
         }
     }
 });
 
-export const { setActiveChats, addActiveChat, removeActiveChat } = activeChats.actions;
+export const { setOwnChats, addOwnChat, removeOwnChat } = ownChats.actions;
 
-export default activeChats.reducer;
+export default ownChats.reducer;

@@ -1,4 +1,5 @@
 import NavigationBar from "../components/navigation/NavigationBar";
+import ChatsPanel from "../components/chatsPanel/ChatsPanel";
 import { Container } from "react-bootstrap";
 
 const HomePage = () => {
@@ -7,8 +8,8 @@ const HomePage = () => {
 
         <NavigationBar />
 
-        <Container className="mt-3 flex-fill">
-            
+        <Container className="flex-fill">
+            <ChatsPanel />
         </Container>
 
         </div>

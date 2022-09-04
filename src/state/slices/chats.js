@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    value: []
+    value: [],
+    search: null
 }
 
 const chats = createSlice({
@@ -18,10 +19,13 @@ const chats = createSlice({
         },
         removeChat: (state, action) => {
             state.value = state.value.filter(chat => chat.getId() !== action.payload);
+        },
+        setSearch: (state, action) => {
+            state.search = action.payload;
         }
     }
 });
 
-export const { setChats, addChat, removeChat } = chats.actions;
+export const { setChats, addChat, removeChat, setSearch } = chats.actions;
 
 export default chats.reducer;

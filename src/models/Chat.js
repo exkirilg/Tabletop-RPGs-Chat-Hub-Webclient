@@ -1,13 +1,17 @@
 const Chat = class {
     #id;
     #name;
+    #author;
+    #description;
     #members;
     #messages;
     #hasUnreadMessages;
 
-    constructor(id, name, members = [], messages = [], hasUnreadMessages = false) {
+    constructor(id, name, author, description, members = [], messages = [], hasUnreadMessages = false) {
         this.#id = id;
         this.#name = name;
+        this.#author = author;
+        this.#description = description;
         this.#members = members;
         this.#messages = messages;
         this.#hasUnreadMessages = hasUnreadMessages
@@ -19,6 +23,14 @@ const Chat = class {
 
     getName() {
         return this.#name;
+    }
+
+    getAuthor() {
+        return this.#author;
+    }
+
+    getDescription() {
+        return this.#description;
     }
 
     getMembers() {

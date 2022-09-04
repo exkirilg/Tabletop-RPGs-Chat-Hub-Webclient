@@ -67,10 +67,10 @@ const NavigationBar = () => {
                 </Stack>
             </Link>
 
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+
             {
                 activeChats.length > 0 &&
-                <>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         {links(true)}
@@ -83,7 +83,6 @@ const NavigationBar = () => {
                         }
                     </Nav>
                 </Navbar.Collapse>
-                </>
             }
 
             <Navbar.Collapse className="justify-content-end">
