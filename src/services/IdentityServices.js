@@ -37,7 +37,7 @@ export async function signin ({email, password}) {
     }
     else if (body !== null) {
         try {
-            result.systemMessage = body.Authentication[0];
+            result.systemMessage = body.errors.Authentication[0];
         } catch {}
     }
 
