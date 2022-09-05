@@ -8,7 +8,7 @@ const HomePage = () => {
 
         <NavigationBar />
 
-        <Container className="flex-fill">
+        <Container className="flex-fill my-3">
             <ChatsPanel />
         </Container>
 

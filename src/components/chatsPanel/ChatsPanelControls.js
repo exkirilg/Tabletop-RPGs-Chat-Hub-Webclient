@@ -1,38 +1,30 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import appsettings from "../../appsettings.json";
-import ChatCard from "./ChatCard";
 import { setSearch } from "../../state/slices/chats";
-import { Button, Col, Form, InputGroup, Stack, Row  } from "react-bootstrap";
+import { Button, Form, InputGroup, Stack, } from "react-bootstrap";
 import { Search, } from "react-bootstrap-icons";
 
-const OthersChatsPanel = () => {
+const ChatsPanelControls = () => {
     
     const dispatch = useDispatch();
 
     const [currentSearch, setCurrentSearch] = useState("");
 
     const isAuthenticated = useSelector(state => state.identity.isAuthenticated);
-    const ownChats = useSelector(state => state.ownChats.value);
-    const chats = useSelector(state => state.chats.value);
     const search = useSelector(state => state.chats.search);
-
-    const handleSearchSubmit = (e) => {
-        e.preventDefault();
-        dispatch(setSearch(currentSearch));
-    }
+    const ownChats = useSelector(state => state.ownChats.value);
 
     const createNewChat = () => {
         console.log("New chat");
     }
 
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        dispatch(setSearch(currentSearch));
+    }
+    
     return (
-        <>
-
-        <div className="bg-light my-3 py-1 rounded">
-            <h3 className="text-center">Other chats</h3>
-        </div>
-
         <Form className="my-3" onSubmit={handleSearchSubmit}>
             <Stack direction="horizontal" gap={4}>
 
@@ -51,17 +43,7 @@ const OthersChatsPanel = () => {
                 </InputGroup>
             </Stack>
         </Form>
-
-        <Row xs={appsettings.NumberOfChatsPerRow_xs} md={appsettings.NumberOfChatsPerRow_md} className="g-3">
-            {chats.map((chat, index) => (
-                <Col key={index}>
-                    <ChatCard chat={chat} />
-                </Col>
-            ))}
-        </Row>
-
-        </>
     );
 }
 
-export default OthersChatsPanel;
+export default ChatsPanelControls;
