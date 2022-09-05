@@ -3,7 +3,7 @@ import { BoxArrowInRight } from "react-bootstrap-icons";
 
 const ChatCard = ({chat}) => {
     return (
-        <Card className="h-100 shadow-sm border-success">
+        <Card className="h-100 shadow-sm border-info">
             <Card.Header className="border-0">
                 <Card.Title className="text-center">
                     {chat.getName()}
@@ -17,7 +17,7 @@ const ChatCard = ({chat}) => {
             </Card.Body>
 
             <Card.Footer className="pt-0 bg-body border-0">
-                <Button className="shadow-sm float-end" variant="outline-success" >
+                <Button className="shadow-sm float-end" variant="outline-info" >
                     <BoxArrowInRight size={24} />
                 </Button>
             </Card.Footer>

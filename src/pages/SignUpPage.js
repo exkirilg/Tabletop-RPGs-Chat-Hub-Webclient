@@ -7,6 +7,7 @@ import { signup } from "../services/IdentityServices";
 import { setIsAuthenticated, setToken, setName } from "../state/slices/identity";
 import NavigationBar from "../components/navigation/NavigationBar";
 import { Button, Container, FloatingLabel, Form } from "react-bootstrap";
+import appsettings from "../appsettings.json";
 
 const SignUpPage = () => {
     
@@ -98,7 +99,7 @@ const SignUpPage = () => {
 
                 <FloatingLabel label="Password" className="mt-3">
                     <Form.Control type="password" placeholder="Enter password"
-                        {...register("password", {required: true, minLength: 6})} readOnly={loading} />
+                        {...register("password", {required: true, minLength: appsettings.IdentityValidationRules.PasswordMinLength})} readOnly={loading} />
                 </FloatingLabel>
                 {
                     errors.password?.type === "required" &&
@@ -109,7 +110,7 @@ const SignUpPage = () => {
                 {
                     errors.password?.type === "minLength" &&
                     <div className="text-center mt-1">
-                        <Form.Text className="text-danger">Password must be at least 6 characters long</Form.Text>
+                        <Form.Text className="text-danger">Password must be at least {appsettings.IdentityValidationRules.PasswordMinLength} characters long</Form.Text>
                     </div>
                 }
 
