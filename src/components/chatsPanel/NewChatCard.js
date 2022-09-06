@@ -48,7 +48,7 @@ const NewChatCard = () => {
                 </Card.Title>
             </Card.Header>
 
-            <Card.Body className="py-1 px-2">
+            <Card.Body className="p-3">
             </Card.Body>
         </Card>
 
