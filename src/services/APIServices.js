@@ -32,6 +32,34 @@ export async function createNewChat({name, description, authToken}) {
     return result;
 }
 
+export async function getChatInfo(id) {
+    let result = { "succeeded": false, "info": null }
+
+    const request = new Request(
+        `${appsettings.APIServerUrl}/chats/${id}`,
+        {
+            method: "get",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+    );
+
+    const response = await fetch(request);
+
+    let body = null;
+    try {
+        body = await response.json();
+    } catch {}
+
+    if (response.ok) {
+        result.succeeded = true;
+        result.info = body;
+    }
+
+    return result;
+}
+
 function ParceResponseBodyErrors(errors, errorsTypes) {
     let result = "";
     

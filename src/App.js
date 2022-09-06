@@ -9,6 +9,8 @@ import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
+import ChatPage from "./pages/ChatPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 import { Row } from "react-bootstrap";
 
@@ -32,7 +34,7 @@ const App = () => {
             
             {
                 connectionFailed &&
-                <div className="mt-5 text-center text-muted">
+                <div className="mt-5 text-center">
                     <h3>Sorry, connection cannot be established.</h3>
                     <h3>Please try again later.</h3>
                 </div>
@@ -44,6 +46,8 @@ const App = () => {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/signin" element={<SignInPage />} />
                     <Route path="/signup" element={<SignUpPage />} />
+                    <Route path="/chat/:chatId" element={<ChatPage />} />
+                    <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             }
         
