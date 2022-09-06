@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import appsettings from "../../appsettings.json";
 import { Button, Card, Form, Modal } from "react-bootstrap";
-import { Plus } from "react-bootstrap-icons";
 import { createNewChat } from "../../services/APIServices";
 
 const NewChatCard = () => {
@@ -42,20 +41,15 @@ const NewChatCard = () => {
         <>
 
         <Card className="h-100 shadow-sm border-success">
-            <Card.Header className="border-0">
+
+            <Card.Header className="border-0 btn btn-light" onClick={() => setShowModal(true)}>
                 <Card.Title className="text-center">
                     New chat...
                 </Card.Title>
             </Card.Header>
 
             <Card.Body className="py-1 px-2">
-            </Card.Body>    
-
-            <Card.Footer className="pt-0 bg-body border-0">
-                <Button className="shadow-sm float-end" variant="outline-success" onClick={() => setShowModal(true)}>
-                    <Plus size={24} />
-                </Button>
-            </Card.Footer>
+            </Card.Body>
         </Card>
 
         <Modal show={showModal} onHide={() => { setShowModal(false); reset(); }}>
