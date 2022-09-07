@@ -114,8 +114,8 @@ const ChatInput = () => {
                         <Stack direction="horizontal">
                             {
                                 [4, 6, 8, 10, 12, 20, 100].map((value) => (
-                                    <Col>
-                                        <OverlayTrigger key={value} placement={"top"} overlay={<Tooltip>{`d${value}`}</Tooltip>}>
+                                    <Col key={value}>
+                                        <OverlayTrigger placement={"top"} overlay={<Tooltip>{`d${value}`}</Tooltip>}>
                                             <Button variant="outline-light" className="border-0" onClick={() => handleDiceBtn(value)}>
                                                 <img src={getDiceIcon(value)} alt={`d${value}`} className="w-100" style={{maxWidth: 48}} />
                                             </Button>

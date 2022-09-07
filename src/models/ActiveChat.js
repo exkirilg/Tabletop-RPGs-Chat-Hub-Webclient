@@ -3,18 +3,20 @@ const ActiveChat = class {
     #name;
     #author;
     #description;
+    #member;
     #members;
     #messages;
     #hasUnreadMessages;
 
-    constructor(id, name, author, description, members = [], messages = [], hasUnreadMessages = false) {
+    constructor(id, name, author, description) {
         this.#id = id;
         this.#name = name;
         this.#author = author;
         this.#description = description;
-        this.#members = members;
-        this.#messages = messages;
-        this.#hasUnreadMessages = hasUnreadMessages
+        this.#member = null;
+        this.#members = [];
+        this.#messages = [];
+        this.#hasUnreadMessages = false
     }
 
     getId() {
@@ -31,6 +33,13 @@ const ActiveChat = class {
 
     getDescription() {
         return this.#description;
+    }
+
+    getMember() {
+        return this.#member;
+    }
+    setMember(member) {
+        this.#member = member;
     }
 
     getMembers() {

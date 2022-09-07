@@ -24,7 +24,7 @@ const ChatControls = ({chat}) => {
             <Navbar.Collapse className="ms-auto">
 
                 <Stack>
-                    <span className="ms-auto"><PersonFill size={24} /> You have joined as <b>Nickname</b>.</span>
+                    <span className="ms-auto"><PersonFill size={24} /> You have joined as <b>{chat.getMember().getNickname()}</b>.</span>
                     <Button className="ms-auto" variant="btn btn-outline-danger" size="sm" onClick={handleLeave}>
                         <BoxArrowInLeft size={24} /> Leave
                     </Button>

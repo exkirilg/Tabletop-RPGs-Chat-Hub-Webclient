@@ -60,6 +60,39 @@ export async function getChatInfo(id) {
     return result;
 }
 
+export async function createNewMember({chatId, nickname, authToken}) {
+    let result = { "succeeded": false, "systemMessage": "", "info": null }
+
+    const request = new Request(
+        `${appsettings.APIServerUrl}/members/new`,
+        {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": authToken === "" ? "" : "Bearer " + authToken
+            },
+            body: JSON.stringify({ "chatId": chatId, "nickname": nickname })
+        }
+    );
+
+    const response = await fetch(request);
+
+    let body = null;
+    try {
+        body = await response.json();
+    } catch {}
+
+    if (response.ok) {
+        result.succeeded = true;
+        result.info = body;
+    }
+    else if (body !== null) {
+        result.systemMessage = ParceResponseBodyErrors(body.errors, ["Nickname", "Member"])
+    }
+
+    return result;
+}
+
 function ParceResponseBodyErrors(errors, errorsTypes) {
     let result = "";
     

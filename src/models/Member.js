@@ -1,29 +1,35 @@
 const Member = class {
     #id;
-    #name;
     #chat;
+    #username;
+    #nickname;
 
-    constructor(id, name, chat) {
+    constructor(id, chat, username, nickname) {
         this.#id = id;
-        this.#name = name;
         this.#chat = chat;
+        this.#username = username;
+        this.#nickname = nickname;
     }
 
     getId() {
         return this.#id;
     }
 
-    getName() {
-        return this.#name;
-    }
-
     getChat() {
         return this.#chat;
     }
 
+    getUsername() {
+        return this.#username;
+    }
+
+    getNickname() {
+        return this.#nickname;
+    }
+
     compare(otherMember) {
-        if (this.#name < otherMember.getName()) return -1;
-        else if (this.#name > otherMember.getName()) return 1;
+        if (this.#nickname < otherMember.getNickname()) return -1;
+        else if (this.#nickname > otherMember.getNickname()) return 1;
         else return 0;
     }
 }
