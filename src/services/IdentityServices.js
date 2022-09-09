@@ -2,6 +2,35 @@ import appsettings from "../appsettings.json";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setIsAuthenticated, setToken, setName } from "../state/slices/identity";
+import { setActiveChats } from "../state/slices/activeChats";
+import { getActiveChats } from "./APIServices";
+
+export function useRestoreIdentity() {
+    
+    const dispatch = useDispatch();
+
+    const isAuthenticated = useSelector(state => state.identity.isAuthenticated);
+
+    useEffect(() => {
+
+        const tryRestoreIdentity = async () => {
+            const identity = localStorage.getItem("identity");
+            if (identity !== null) {
+                const data = JSON.parse(identity);
+                dispatch(setIsAuthenticated(true));
+                dispatch(setToken(data.token));
+                dispatch(setName(data.username));
+
+                dispatch(setActiveChats(await getActiveChats({ authToken: data.token })));
+            }
+        }
+
+        if (!isAuthenticated) {
+            tryRestoreIdentity();
+        }
+    
+    }, [isAuthenticated, dispatch])
+}
 
 export async function signin ({email, password}) {
 
@@ -85,27 +114,28 @@ export async function signup ({email, name, password, passwordConfirmation}) {
     return result;
 }
 
-export function useRestoreIdentity() {
-    
-    const dispatch = useDispatch();
+export async function signout () {  
+    removeIdentity();
+}
 
-    const isAuthenticated = useSelector(state => state.identity.isAuthenticated);
+export function saveIdentity({token, username}) {
+    localStorage.setItem(
+        "identity",
+        JSON.stringify({ token: token, username: username }));
+}
 
-    useEffect(() => {
+export function removeIdentity() {
+    localStorage.removeItem("identity");
+}
 
-        const tryRestoreIdentity = () => {
-            const identity = localStorage.getItem("identity");
-            if (identity !== null) {
-                const data = JSON.parse(identity);
-                dispatch(setIsAuthenticated(true));
-                dispatch(setToken(data.token));
-                dispatch(setName(data.username));
-            }
+export async function removeMember (memberId) {
+    const request = new Request(
+        `${appsettings.APIServerUrl}/members/remove/${memberId}`,
+        {
+            method: "post",
+            headers: { "Content-Type": "application/json" }
         }
+    );
 
-        if (!isAuthenticated) {
-            tryRestoreIdentity();
-        }
-    
-    }, [isAuthenticated, dispatch])
+    await fetch(request);
 }

@@ -3,11 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { signup } from "../services/IdentityServices";
+import { saveIdentity, signup } from "../services/IdentityServices";
 import { setIsAuthenticated, setToken, setName } from "../state/slices/identity";
 import NavigationBar from "../components/navigation/NavigationBar";
 import { Button, Container, FloatingLabel, Form } from "react-bootstrap";
 import appsettings from "../appsettings.json";
+import { updateMember } from "../services/APIServices";
 
 const SignUpPage = () => {
     
@@ -18,6 +19,7 @@ const SignUpPage = () => {
     const [message, setMessage] = useState("");
 
     const isAuthenticated = useSelector(state => state.identity.isAuthenticated);
+    const activeChats = useSelector(state => state.activeChats.value);
     
     const { register, handleSubmit, watch, formState: { errors } } = useForm({
         mode: "onBlur",
@@ -41,13 +43,20 @@ const SignUpPage = () => {
         setMessage(result.systemMessage);
 
         if (result.succeeded) {
+            saveIdentity(result);
+            
+            if (activeChats.length > 0) {
+                activeChats.forEach((chat) => {
+                    chat.getMember().setUsername(result.username);
+                    updateMember({memberId: chat.getMember().getId(), authToken: result.token});
+                });
+            }
+
+            await new Promise(t => setTimeout(t, 1000));
+
             dispatch(setIsAuthenticated(true));
             dispatch(setToken(result.token));
             dispatch(setName(result.username));
-
-            localStorage.setItem(
-                "identity",
-                JSON.stringify({ token: result.token, username: result.username }));
 
             navigate("/");
         }

@@ -1,11 +1,27 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Container, Navbar, Stack } from "react-bootstrap";
-import { BoxArrowInLeft, PersonFill } from "react-bootstrap-icons";
+import { BoxArrowInLeft, Link45deg, PersonFill } from "react-bootstrap-icons";
+import { removeMember } from "../../services/APIServices";
+import appsettings from "../../appsettings.json";
+import { removeActiveChat } from "../../state/slices/activeChats";
 
 const ChatControls = ({chat}) => {
 
-    const handleLeave = () => {
-        console.log("Leave");
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const connection = useSelector(state => state.connection.value);
+    const authToken = useSelector(state => state.identity.token);
+
+    const handleLeave = async () => {
+        const result = await removeMember({memberId: chat.getMember().getId(), authToken: authToken});
+        if (result.succeeded) {
+            connection.invoke(appsettings.ChatHubMethods.LeaveChatRequestMethod, chat.getMember().getId());
+            dispatch(removeActiveChat(chat.getId()));
+
+            navigate("/");
+        }
     }
 
     return (
@@ -16,7 +32,12 @@ const ChatControls = ({chat}) => {
                 <Link to="/" className="text-decoration-none">
                     <Navbar.Brand>Tabletop RPGs Chat-Hub</Navbar.Brand>
                 </Link>
-                <Navbar.Brand>{chat.getName()}</Navbar.Brand>
+                <Navbar.Brand>
+                    {chat.getName()}
+                    <Button variant="link" style={{boxShadow: "none"}} onClick={() => navigator.clipboard.writeText(window.location.href)}>
+                        <Link45deg size={24} />
+                    </Button>
+                </Navbar.Brand>
             </Stack>
 
             <Navbar.Toggle aria-controls="basic-navbar-nav" />

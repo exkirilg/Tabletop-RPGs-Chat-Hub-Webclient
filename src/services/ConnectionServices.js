@@ -146,13 +146,13 @@ export function useEstablishConnection() {
                 );
                 connection.invoke(
                     appsettings.ChatHubMethods.OthersChatsInfoRequestMethod,
-                    Number(appsettings.MaxNumberOfChatsDisplayed), search
+                    search
                 );
             }
             else {
                 connection.invoke(
                     appsettings.ChatHubMethods.ChatsInfoRequestMethod,
-                    Number(appsettings.MaxNumberOfChatsDisplayed), search
+                    search
                 );
             }
         }

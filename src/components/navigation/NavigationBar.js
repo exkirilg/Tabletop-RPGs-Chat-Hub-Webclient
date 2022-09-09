@@ -6,6 +6,9 @@ import { setIsAuthenticated, setToken, setName } from "../../state/slices/identi
 import { Button, Container, Nav, Navbar, NavDropdown, Stack } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Chat, ChatDots, PersonCircle } from "react-bootstrap-icons";
+import { signout } from "../../services/IdentityServices";
+import { setActiveChats } from "../../state/slices/activeChats";
+import { removeMember } from "../../services/APIServices";
 
 const NavigationBar = () => {
 
@@ -14,6 +17,7 @@ const NavigationBar = () => {
 
     const isAuthenticated = useSelector(state => state.identity.isAuthenticated);
     const username = useSelector(state => state.identity.name);
+    const authToken = useSelector(state => state.identity.token);
     const activeChats = useSelector(state => state.activeChats.value);
     const statisticsChats = useSelector(state => state.statistics.chats);
     const statisticsUsers = useSelector(state => state.statistics.users);
@@ -26,7 +30,7 @@ const NavigationBar = () => {
 
         for (i; i < count; i++) {
             result.push(
-                <LinkContainer to={`rooms/${activeChats[i].getName()}`} className="text-decoration-none px-3" key={i}>
+                <LinkContainer to={`chat/${activeChats[i].getId()}`} className="text-decoration-none px-3" key={i}>
                     <Nav.Link>
                         <span>{activeChats[i].getName()}</span>
                         {
@@ -42,12 +46,18 @@ const NavigationBar = () => {
         return result;
     }
 
-    const handleSignout = () => {
+    const handleSignout = async () => {
+        await signout();
+        
+        for (const chat of activeChats) {
+            await removeMember({ memberId: chat.getMember().getId(), authToken: authToken });
+        }
+
         dispatch(setIsAuthenticated(false));
         dispatch(setToken(""));
         dispatch(setName(""));
 
-        localStorage.removeItem("identity");
+        dispatch(setActiveChats([]));
 
         navigate("/");
     }

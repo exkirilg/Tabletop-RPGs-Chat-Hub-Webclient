@@ -3,11 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { signin } from "../services/IdentityServices";
+import { saveIdentity, signin } from "../services/IdentityServices";
 import { setIsAuthenticated, setToken, setName } from "../state/slices/identity";
 import NavigationBar from "../components/navigation/NavigationBar";
 import { Button, Container, FloatingLabel, Form } from "react-bootstrap";
 import appsettings from "../appsettings.json";
+import { getActiveChats, updateMember } from "../services/APIServices";
+import { setActiveChats } from "../state/slices/activeChats";
 
 const SignInPage = () => {
     
@@ -18,6 +20,7 @@ const SignInPage = () => {
     const [message, setMessage] = useState("");
 
     const isAuthenticated = useSelector(state => state.identity.isAuthenticated);
+    const activeChats = useSelector(state => state.activeChats.value);
     
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onBlur",
@@ -37,14 +40,21 @@ const SignInPage = () => {
         setMessage(result.systemMessage);
 
         if (result.succeeded) {
+            saveIdentity(result);
+
+            if (activeChats.length > 0) {
+                for (const chat of activeChats) {
+                    chat.getMember().setUsername(result.username);
+                    await updateMember({memberId: chat.getMember().getId(), authToken: result.token});
+                }
+            }
+
+            dispatch(setActiveChats(await getActiveChats({ authToken: result.token })));
+
             dispatch(setIsAuthenticated(true));
             dispatch(setToken(result.token));
             dispatch(setName(result.username));
-
-            localStorage.setItem(
-                "identity",
-                JSON.stringify({ token: result.token, username: result.username }));
-
+            
             navigate("/");
         }
     }

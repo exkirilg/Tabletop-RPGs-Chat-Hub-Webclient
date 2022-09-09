@@ -22,6 +22,9 @@ const Member = class {
     getUsername() {
         return this.#username;
     }
+    setUsername(username) {
+        this.#username = username;
+    }
 
     getNickname() {
         return this.#nickname;
