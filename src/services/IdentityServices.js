@@ -1,7 +1,7 @@
 import appsettings from "../appsettings.json";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { setIsAuthenticated, setToken, setName } from "../state/slices/identity";
+import { setIdentityIsRestored, setIsAuthenticated, setToken, setUsername, setNickname } from "../state/slices/identity";
 import { setActiveChats } from "../state/slices/activeChats";
 import { getActiveChats } from "./APIServices";
 
@@ -17,9 +17,11 @@ export function useRestoreIdentity() {
             const identity = localStorage.getItem("identity");
             if (identity !== null) {
                 const data = JSON.parse(identity);
+
                 dispatch(setIsAuthenticated(true));
                 dispatch(setToken(data.token));
-                dispatch(setName(data.username));
+                dispatch(setUsername(data.username));
+                dispatch(setNickname(data.username));
 
                 dispatch(setActiveChats(await getActiveChats({ authToken: data.token })));
             }
@@ -27,6 +29,7 @@ export function useRestoreIdentity() {
 
         if (!isAuthenticated) {
             tryRestoreIdentity();
+            dispatch(setIdentityIsRestored(true));
         }
     
     }, [isAuthenticated, dispatch])

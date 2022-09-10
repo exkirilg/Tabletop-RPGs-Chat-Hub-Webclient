@@ -19,6 +19,7 @@ const App = () => {
     useRestoreIdentity();
     useEstablishConnection();
     
+    const identityIsRestored = useSelector(state => state.identity.identityIsRestored);
     const connection = useSelector(state => state.connection.value);
     const connectionFailed = useSelector(state => state.connection.failed);
   
@@ -26,7 +27,7 @@ const App = () => {
         <div className="App">
 
             {
-                !connection && !connectionFailed &&
+                !identityIsRestored && !connection && !connectionFailed &&
                 <Row className="d-flex justify-content-center">
                     <div className="spinner-border m-5" role="status" />
                 </Row>
@@ -41,7 +42,7 @@ const App = () => {
             }
             
             {
-                connection &&
+                identityIsRestored && connection &&
                 <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/signin" element={<SignInPage />} />

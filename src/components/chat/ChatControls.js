@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Container, Navbar, Stack } from "react-bootstrap";
-import { BoxArrowInLeft, Link45deg, PersonFill } from "react-bootstrap-icons";
+import { BoxArrowInLeft, Link45deg, PersonFill, XLg } from "react-bootstrap-icons";
 import { removeMember } from "../../services/APIServices";
 import appsettings from "../../appsettings.json";
 import { removeActiveChat } from "../../state/slices/activeChats";
@@ -13,6 +13,7 @@ const ChatControls = ({chat}) => {
 
     const connection = useSelector(state => state.connection.value);
     const authToken = useSelector(state => state.identity.token);
+    const username = useSelector(state => state.identity.username);
 
     const handleLeave = async () => {
         const result = await removeMember({memberId: chat.getMember().getId(), authToken: authToken});
@@ -22,6 +23,10 @@ const ChatControls = ({chat}) => {
 
             navigate("/");
         }
+    }
+
+    const handleDeleteChat = async () => {
+        
     }
 
     return (
@@ -44,11 +49,19 @@ const ChatControls = ({chat}) => {
 
             <Navbar.Collapse className="ms-auto">
 
-                <Stack>
+                <Stack gap={1}>
                     <span className="ms-auto"><PersonFill size={24} /> You have joined as <b>{chat.getMember().getNickname()}</b>.</span>
-                    <Button className="ms-auto" variant="btn btn-outline-danger" size="sm" onClick={handleLeave}>
-                        <BoxArrowInLeft size={24} /> Leave
-                    </Button>
+                    <Stack direction="horizontal" gap={2} className="ms-auto">
+                        <Button variant="btn btn-outline-primary" size="sm" onClick={handleLeave}>
+                            <BoxArrowInLeft size={24} /> Leave
+                        </Button>
+                        {
+                            chat.getAuthor() === username &&
+                            <Button variant="btn btn-outline-danger" size="sm" onClick={handleDeleteChat}>
+                                <XLg size={24} /> Delete chat
+                            </Button>
+                        }
+                    </Stack>
                 </Stack>
 
             </Navbar.Collapse>

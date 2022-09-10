@@ -11,6 +11,7 @@ const ChatsPanel = () => {
     const isAuthenticated = useSelector(state => state.identity.isAuthenticated);
     const ownChats = useSelector(state => state.ownChats.value);
     const chats = useSelector(state => state.chats.value);
+    const activeChats = useSelector(state => state.activeChats.value);
 
     return (
         <>
@@ -37,11 +38,13 @@ const ChatsPanel = () => {
         <ChatsPanelControls />
 
         <Row xs={appsettings.NumberOfChatsPerRow_xs} md={appsettings.NumberOfChatsPerRow_md} className="g-3">
-            {chats.map((chat, index) => (
+            {
+                chats.slice(0, appsettings.MaxNumberOfChatsDisplayed).map((chat, index) => (
                 <Col key={index}>
                     <ChatCard chat={chat} />
                 </Col>
-            ))}
+                ))
+            }
         </Row>
         
         </>

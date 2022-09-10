@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { saveIdentity, signup } from "../services/IdentityServices";
-import { setIsAuthenticated, setToken, setName } from "../state/slices/identity";
+import { setIsAuthenticated, setToken, setUsername, setNickname } from "../state/slices/identity";
 import NavigationBar from "../components/navigation/NavigationBar";
 import { Button, Container, FloatingLabel, Form } from "react-bootstrap";
 import appsettings from "../appsettings.json";
@@ -56,7 +56,8 @@ const SignUpPage = () => {
 
             dispatch(setIsAuthenticated(true));
             dispatch(setToken(result.token));
-            dispatch(setName(result.username));
+            dispatch(setUsername(result.username));
+            dispatch(setNickname(result.username));
 
             navigate("/");
         }

@@ -10,6 +10,7 @@ import { Button, Form, Modal, Row } from "react-bootstrap";
 import { CheckLg } from "react-bootstrap-icons";
 import appsettings from "../appsettings.json";
 import { addActiveChat } from "../state/slices/activeChats";
+import { setNickname } from "../state/slices/identity";
 
 const ChatPage = () => {
     
@@ -20,7 +21,7 @@ const ChatPage = () => {
     const activeChats = useSelector(state => state.activeChats.value);
     const connection = useSelector(state => state.connection.value);
     const authToken = useSelector(state => state.identity.token);
-    const username = useSelector(state => state.identity.name);
+    const nickname = useSelector(state => state.identity.nickname);
 
     const [chat, setChat] = useState(null);
     
@@ -31,7 +32,7 @@ const ChatPage = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         mode: "onBlur",
         defaultValues: {
-            "nickname": username
+            "nickname": nickname
         }
     });
 
@@ -75,7 +76,9 @@ const ChatPage = () => {
         if (result.succeeded) {
             chat.setMember(new Member(result.info.id, result.info.chatId, result.info.username, result.info.nickname));
             connection.invoke(appsettings.ChatHubMethods.JoinChatRequestMethod, chat.getMember().getId());
+            
             dispatch(addActiveChat(chat));
+            dispatch(setNickname(data.nickname));
 
             setShowModal(false);
             reset();

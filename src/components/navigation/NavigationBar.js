@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import appsettings from "../../appsettings.json";
-import { setIsAuthenticated, setToken, setName } from "../../state/slices/identity";
+import { setIsAuthenticated, setToken, setUsername, setNickname } from "../../state/slices/identity";
 import { Button, Container, Nav, Navbar, NavDropdown, Stack } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Chat, ChatDots, PersonCircle } from "react-bootstrap-icons";
@@ -16,7 +16,7 @@ const NavigationBar = () => {
     const navigate = useNavigate();
 
     const isAuthenticated = useSelector(state => state.identity.isAuthenticated);
-    const username = useSelector(state => state.identity.name);
+    const username = useSelector(state => state.identity.username);
     const authToken = useSelector(state => state.identity.token);
     const activeChats = useSelector(state => state.activeChats.value);
     const statisticsChats = useSelector(state => state.statistics.chats);
@@ -55,7 +55,8 @@ const NavigationBar = () => {
 
         dispatch(setIsAuthenticated(false));
         dispatch(setToken(""));
-        dispatch(setName(""));
+        dispatch(setUsername(""));
+        dispatch(setNickname(""));
 
         dispatch(setActiveChats([]));
 
