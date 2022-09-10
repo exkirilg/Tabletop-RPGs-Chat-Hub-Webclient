@@ -2,9 +2,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Container, Navbar, Stack } from "react-bootstrap";
 import { BoxArrowInLeft, Link45deg, PersonFill, XLg } from "react-bootstrap-icons";
-import { removeMember } from "../../services/APIServices";
+import { removeChat, removeMember } from "../../services/APIServices";
 import appsettings from "../../appsettings.json";
 import { removeActiveChat } from "../../state/slices/activeChats";
+import { useState } from "react";
 
 const ChatControls = ({chat}) => {
 
@@ -14,6 +15,8 @@ const ChatControls = ({chat}) => {
     const connection = useSelector(state => state.connection.value);
     const authToken = useSelector(state => state.identity.token);
     const username = useSelector(state => state.identity.username);
+
+    const [loading, setLoading] = useState(false);
 
     const handleLeave = async () => {
         const result = await removeMember({memberId: chat.getMember().getId(), authToken: authToken});
@@ -26,7 +29,16 @@ const ChatControls = ({chat}) => {
     }
 
     const handleDeleteChat = async () => {
-        
+        setLoading(true);
+        const result = await removeChat({chatId: chat.getId(), authToken: authToken});
+        setLoading(false);
+
+        if (result.systemMessage) alert(result.systemMessage);
+
+        if (result.succeeded) {
+            dispatch(removeActiveChat(chat.getId()));
+            navigate("/");
+        }
     }
 
     return (
@@ -52,12 +64,12 @@ const ChatControls = ({chat}) => {
                 <Stack gap={1}>
                     <span className="ms-auto"><PersonFill size={24} /> You have joined as <b>{chat.getMember().getNickname()}</b>.</span>
                     <Stack direction="horizontal" gap={2} className="ms-auto">
-                        <Button variant="btn btn-outline-primary" size="sm" onClick={handleLeave}>
+                        <Button variant="btn btn-outline-primary" size="sm" onClick={handleLeave} readOnly={loading}>
                             <BoxArrowInLeft size={24} /> Leave
                         </Button>
                         {
                             chat.getAuthor() === username &&
-                            <Button variant="btn btn-outline-danger" size="sm" onClick={handleDeleteChat}>
+                            <Button variant="btn btn-outline-danger" size="sm" onClick={handleDeleteChat} readOnly={loading}>
                                 <XLg size={24} /> Delete chat
                             </Button>
                         }

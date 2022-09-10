@@ -34,6 +34,37 @@ export async function createNewChat({name, description, authToken}) {
     return result;
 }
 
+export async function removeChat({chatId, authToken}) {
+    let result = { "succeeded": false, "systemMessage": "" }
+
+    const request = new Request(
+        `${appsettings.APIServerUrl}/chats/remove/${chatId}`,
+        {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + authToken
+            }
+        }
+    );
+
+    const response = await fetch(request);
+
+    let body = null;
+    try {
+        body = await response.json();
+    } catch {}
+
+    if (response.ok) {
+        result.succeeded = true;
+    }
+    else if (body !== null) {
+        result.systemMessage = ParceResponseBodyErrors(body.errors, ["Chat"])
+    }
+
+    return result;
+}
+
 export async function getChatInfo(id) {
     let result = { "succeeded": false, "info": null }
 
