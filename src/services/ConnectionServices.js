@@ -12,7 +12,7 @@ import { setStatistics } from "../state/slices/statistics";
 import { removeActiveChat } from "../state/slices/activeChats";
 import { removeChat, setChats } from "../state/slices/chats";
 import { setOwnChats } from "../state/slices/ownChats";
-import { addMessage } from "../state/slices/messages";
+import { setMessages, addMessage } from "../state/slices/messages";
 
 export function useEstablishConnection() {
     const dispatch = useDispatch();
@@ -94,6 +94,7 @@ export function useEstablishConnection() {
             connection.on(appsettings.ClientMethods.ReceiveOwnChatsInfoMethod, (chatsInfo) => handleOwnChatsInfoReceived(chatsInfo));
             connection.on(appsettings.ClientMethods.ReceiveOthersChatsInfoMethod, (chatsInfo) => handleOthersChatsInfoReceived(chatsInfo));
             connection.on(appsettings.ClientMethods.ReceiveChatHasBeenRemovedMethod, (chatsInfo) => handleChatHasBeenRemovedReceived(chatsInfo));
+            connection.on(appsettings.ClientMethods.ReceiveMessagesMethod, (chatId, msgs) => handleMessagesReceived(chatId, msgs));
             connection.on(appsettings.ClientMethods.ReceiveSystemMessageMethod, (msg) => handleNewMessageReceived(msg));
             connection.on(appsettings.ClientMethods.ReceiveUserMessageMethod, (msg) => handleNewMessageReceived(msg));
         }
@@ -143,10 +144,26 @@ export function useEstablishConnection() {
             }
         }
 
+        const handleMessagesReceived = (chatId, msgs) => {
+            dispatch(setMessages({
+                chatId: chatId,
+                msgs: msgs.map((msg) => {
+                    return new Message(
+                        msg.id,
+                        msg.chatId,
+                        msg.authorId,
+                        msg.author,
+                        new Date(msg.dateTimeCreated),
+                        msg.textContent)
+                })
+            }));
+        }
+
         const handleNewMessageReceived = (msg) => {
             dispatch(addMessage(new Message(
                 msg.id,
                 msg.chatId,
+                msg.authorId,
                 msg.author,
                 new Date(msg.dateTimeCreated),
                 msg.textContent)));

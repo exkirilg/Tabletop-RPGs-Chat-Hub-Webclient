@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
+
 import { Button, Col, Container, InputGroup, Form, Stack, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { ChatDots } from "react-bootstrap-icons";
 import appsettings from "../../appsettings.json";
@@ -11,7 +13,9 @@ import d12Icon from "../../icons/d12.svg";
 import d20Icon from "../../icons/d20.svg";
 import d100Icon from "../../icons/d100.svg";
 
-const ChatInput = () => {
+const ChatInput = ({member}) => {
+
+    const connection = useSelector(state => state.connection.value);
 
     const [text, setText] = useState("");
 
@@ -20,8 +24,7 @@ const ChatInput = () => {
             return;
         }
 
-        // TODO:
-        console.log(text);
+        connection.invoke(appsettings.ChatHubMethods.SendMessageRequestMethod, member.getId(), text);
 
         setText("");
     }

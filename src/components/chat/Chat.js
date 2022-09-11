@@ -7,8 +7,8 @@ const Chat = ({chat}) => {
         <>
 
         <ChatControls chat={chat} />
-        <ChatMessages />
-        <ChatInput />
+        <ChatMessages chat={chat} />
+        <ChatInput chat={chat} member={chat.getMember()} />
 
         </>
     );

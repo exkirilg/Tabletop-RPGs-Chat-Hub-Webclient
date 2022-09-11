@@ -1,13 +1,15 @@
 const Message = class {
     #id;
     #chatId;
+    #authorId;
     #author;
     #dateTimeCreated;
     #textContent;
 
-    constructor(id, chatId, author, dateTimeCreated, textContent) {
+    constructor(id, chatId, authorId, author, dateTimeCreated, textContent) {
         this.#id = id;
         this.#chatId = chatId;
+        this.#authorId = authorId;
         this.#author = author;
         this.#dateTimeCreated = dateTimeCreated;
         this.#textContent = textContent;
@@ -19,6 +21,10 @@ const Message = class {
 
     getChatId() {
         return this.#chatId;
+    }
+
+    getAuthorId() {
+        return this.#authorId;
     }
 
     getAuthor() {
