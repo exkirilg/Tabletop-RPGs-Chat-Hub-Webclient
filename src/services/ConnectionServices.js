@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import Chat from "../models/Chat";
 import Message from "../models/Message";
+import DiceRoll from "../models/DiceRoll";
 
 import appsettings from "../appsettings.json";
 import { setConnection, setProcessing, setFailed, setIsAuthenticated } from "../state/slices/connection";
@@ -154,7 +155,11 @@ export function useEstablishConnection() {
                         msg.authorId,
                         msg.author,
                         new Date(msg.dateTimeCreated),
-                        msg.textContent)
+                        msg.textContent,
+                        msg.dicePoolRoll.map((roll) => {
+                            return new DiceRoll(roll.position, roll.dice, roll.result)
+                        }).sort((a, b) => a.compare(b))
+                    )
                 })
             }));
         }
@@ -166,7 +171,12 @@ export function useEstablishConnection() {
                 msg.authorId,
                 msg.author,
                 new Date(msg.dateTimeCreated),
-                msg.textContent)));
+                msg.textContent,
+                msg.dicePoolRoll.map((roll) => {
+                    return new DiceRoll(roll.position, roll.dice, roll.result)
+                }).sort((a, b) => a.compare(b))
+                )
+            ));
         }
 
         if (!identityIsRestored) return;

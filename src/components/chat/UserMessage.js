@@ -1,4 +1,4 @@
-import { Card, Stack } from "react-bootstrap";
+import { Card, Col, Row, Stack } from "react-bootstrap";
 
 const UserMessage = ({chat, message}) => {
 
@@ -23,6 +23,8 @@ const UserMessage = ({chat, message}) => {
             return "#daeaf1";
         }
     }
+
+    console.log(message.getDicePoolRoll());
     
     return (
         <div className="d-flex">
@@ -40,6 +42,19 @@ const UserMessage = ({chat, message}) => {
 
                 <Card.Body className="py-1 px-3 text-break" style={{background: getCardBgColor()}}>
                     {message.getTextContent()}
+                    <Row className="g-2">
+                        {
+                            message.getDicePoolRoll().map((roll) => (
+                            <Col key={roll.getPosition()}>
+                                <div className="text-center bg-light p-2 rounded">
+                                    <h6>{roll.getDice()}</h6>
+                                    <hr className="my-1" />
+                                    {roll.getResult()}
+                                </div>
+                            </Col>  
+                            ))
+                        }
+                    </Row>
                 </Card.Body>
 
                 <Card.Footer className="text-muted d-flex justify-content-end p-1" style={{fontSize: "0.8em"}}>

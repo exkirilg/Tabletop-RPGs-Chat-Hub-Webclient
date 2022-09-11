@@ -5,14 +5,16 @@ const Message = class {
     #author;
     #dateTimeCreated;
     #textContent;
+    #dicePoolRoll;
 
-    constructor(id, chatId, authorId, author, dateTimeCreated, textContent) {
+    constructor(id, chatId, authorId, author, dateTimeCreated, textContent, dicePoolRoll = []) {
         this.#id = id;
         this.#chatId = chatId;
         this.#authorId = authorId;
         this.#author = author;
         this.#dateTimeCreated = dateTimeCreated;
         this.#textContent = textContent;
+        this.#dicePoolRoll = dicePoolRoll;
     }
 
     getId() {
@@ -38,6 +40,10 @@ const Message = class {
     getTextContent() {
         return this.#textContent;
     }
+
+    getDicePoolRoll() {
+        return this.#dicePoolRoll;
+    };
 
     compare(otherMsg) {
         if (this.#dateTimeCreated < otherMsg.getDateTimeCreated()) return -1;
