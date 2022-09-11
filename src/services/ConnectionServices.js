@@ -1,17 +1,22 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { useNavigate } from "react-router-dom";
 
 import Chat from "../models/Chat";
+import Message from "../models/Message";
 
 import appsettings from "../appsettings.json";
 import { setConnection, setProcessing, setFailed, setIsAuthenticated } from "../state/slices/connection";
 import { setStatistics } from "../state/slices/statistics";
-import { setChats } from "../state/slices/chats";
+import { removeActiveChat } from "../state/slices/activeChats";
+import { removeChat, setChats } from "../state/slices/chats";
 import { setOwnChats } from "../state/slices/ownChats";
+import { addMessage } from "../state/slices/messages";
 
 export function useEstablishConnection() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     
     const connection = useSelector(state => state.connection.value);
     const processing = useSelector(state => state.connection.processing);
@@ -21,6 +26,9 @@ export function useEstablishConnection() {
 
     const isAuthenticated = useSelector(state => state.identity.isAuthenticated);
     const token = useSelector(state => state.identity.token);
+    const identityIsRestored = useSelector(state => state.identity.identityIsRestored);
+
+    const activeChats = useSelector(state => state.activeChats.value);
 
     // Establish connection
     useEffect(() => {
@@ -73,6 +81,10 @@ export function useEstablishConnection() {
         
             await connection.start();
 
+            for (const chat of activeChats) {
+                connection.invoke(appsettings.ChatHubMethods.JoinChatRequestMethod, chat.getMember().getId());
+            }
+
             return connection;
         }
 
@@ -81,6 +93,9 @@ export function useEstablishConnection() {
             connection.on(appsettings.ClientMethods.ReceiveChatsInfoMethod, (chatsInfo) => handleChatsInfoReceived(chatsInfo));
             connection.on(appsettings.ClientMethods.ReceiveOwnChatsInfoMethod, (chatsInfo) => handleOwnChatsInfoReceived(chatsInfo));
             connection.on(appsettings.ClientMethods.ReceiveOthersChatsInfoMethod, (chatsInfo) => handleOthersChatsInfoReceived(chatsInfo));
+            connection.on(appsettings.ClientMethods.ReceiveChatHasBeenRemovedMethod, (chatsInfo) => handleChatHasBeenRemovedReceived(chatsInfo));
+            connection.on(appsettings.ClientMethods.ReceiveSystemMessageMethod, (msg) => handleNewMessageReceived(msg));
+            connection.on(appsettings.ClientMethods.ReceiveUserMessageMethod, (msg) => handleNewMessageReceived(msg));
         }
 
         const handleStatisticsReceived = (statistics) => {
@@ -120,6 +135,25 @@ export function useEstablishConnection() {
             );
         }
 
+        const handleChatHasBeenRemovedReceived = (chatInfo) => {
+            if (window.location.href.endsWith(chatInfo.id)) {
+                dispatch(removeChat(chatInfo.id));
+                dispatch(removeActiveChat(chatInfo.id));
+                navigate("/");
+            }
+        }
+
+        const handleNewMessageReceived = (msg) => {
+            dispatch(addMessage(new Message(
+                msg.id,
+                msg.chatId,
+                msg.author,
+                new Date(msg.dateTimeCreated),
+                msg.textContent)));
+        }
+
+        if (!identityIsRestored) return;
+
         if (processing) return;
 
         if (connection === null) {
@@ -129,7 +163,7 @@ export function useEstablishConnection() {
             disconnect();
         }
 
-    }, [connection, processing, connectionIsAuthenticated, isAuthenticated, token, dispatch])
+    }, [identityIsRestored, connection, processing, connectionIsAuthenticated, isAuthenticated, token, activeChats, dispatch])
 
     // Requests on connection
     useEffect(() => {

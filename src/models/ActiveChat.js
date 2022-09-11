@@ -4,9 +4,6 @@ const ActiveChat = class {
     #author;
     #description;
     #member;
-    #members;
-    #messages;
-    #hasUnreadMessages;
 
     constructor(id, name, author, description) {
         this.#id = id;
@@ -14,9 +11,6 @@ const ActiveChat = class {
         this.#author = author;
         this.#description = description;
         this.#member = null;
-        this.#members = [];
-        this.#messages = [];
-        this.#hasUnreadMessages = false
     }
 
     getId() {
@@ -40,30 +34,6 @@ const ActiveChat = class {
     }
     setMember(member) {
         this.#member = member;
-    }
-
-    getMembers() {
-        return this.#members;
-    }
-    addMember(member) {
-        this.#members = [...this.#members, member].sort((a, b) => a.compare(b));
-    }
-    removeMember(memberId) {
-        this.#members = this.#members.filter(m => m.id !== memberId);
-    }
-
-    getMessages() {
-        return this.#messages;
-    }
-    addMessage(msg) {
-        this.#messages = [...this.#messages, msg].sort((a, b) => a.compare(b));
-    }
-
-    getHasUnreadMessages() {
-        return this.#hasUnreadMessages;
-    }
-    setHasUnreadMessages(value) {
-        this.#hasUnreadMessages = value;
     }
 
     compare(otherChat) {

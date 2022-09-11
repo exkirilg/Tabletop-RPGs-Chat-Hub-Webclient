@@ -25,11 +25,11 @@ export function useRestoreIdentity() {
 
                 dispatch(setActiveChats(await getActiveChats({ authToken: data.token })));
             }
+            dispatch(setIdentityIsRestored(true));
         }
 
         if (!isAuthenticated) {
             tryRestoreIdentity();
-            dispatch(setIdentityIsRestored(true));
         }
     
     }, [isAuthenticated, dispatch])

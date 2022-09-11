@@ -5,7 +5,7 @@ import appsettings from "../../appsettings.json";
 import { setIsAuthenticated, setToken, setUsername, setNickname } from "../../state/slices/identity";
 import { Button, Container, Nav, Navbar, NavDropdown, Stack } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { Chat, ChatDots, PersonCircle } from "react-bootstrap-icons";
+import { ChatDots, PersonCircle } from "react-bootstrap-icons";
 import { signout } from "../../services/IdentityServices";
 import { setActiveChats } from "../../state/slices/activeChats";
 import { removeMember } from "../../services/APIServices";
@@ -33,11 +33,7 @@ const NavigationBar = () => {
                 <LinkContainer to={`chat/${activeChats[i].getId()}`} className="text-decoration-none px-3" key={i}>
                     <Nav.Link>
                         <span>{activeChats[i].getName()}</span>
-                        {
-                            activeChats[i].getHasUnreadMessages() ?
-                            <ChatDots className="ms-2 mb-3" /> :
-                            <Chat className="ms-2 mb-3" />
-                        }
+                        <ChatDots className="ms-2 mb-3" />
                     </Nav.Link>
                 </LinkContainer>
             );

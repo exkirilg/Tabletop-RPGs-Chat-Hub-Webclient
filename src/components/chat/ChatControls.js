@@ -5,6 +5,8 @@ import { BoxArrowInLeft, Link45deg, PersonFill, XLg } from "react-bootstrap-icon
 import { removeChat, removeMember } from "../../services/APIServices";
 import appsettings from "../../appsettings.json";
 import { removeActiveChat } from "../../state/slices/activeChats";
+import { removeChat as removeChatFromState } from "../../state/slices/chats";
+import { removeOwnChat } from "../../state/slices/ownChats";
 import { useState } from "react";
 
 const ChatControls = ({chat}) => {
@@ -19,13 +21,11 @@ const ChatControls = ({chat}) => {
     const [loading, setLoading] = useState(false);
 
     const handleLeave = async () => {
-        const result = await removeMember({memberId: chat.getMember().getId(), authToken: authToken});
-        if (result.succeeded) {
-            connection.invoke(appsettings.ChatHubMethods.LeaveChatRequestMethod, chat.getMember().getId());
-            dispatch(removeActiveChat(chat.getId()));
+        connection.invoke(appsettings.ChatHubMethods.LeaveChatRequestMethod, chat.getMember().getId());
+        removeMember({memberId: chat.getMember().getId(), authToken: authToken});
 
-            navigate("/");
-        }
+        dispatch(removeActiveChat(chat.getId()));
+        navigate("/");
     }
 
     const handleDeleteChat = async () => {
@@ -36,7 +36,9 @@ const ChatControls = ({chat}) => {
         if (result.systemMessage) alert(result.systemMessage);
 
         if (result.succeeded) {
+            dispatch(removeChatFromState(chat.getId()));
             dispatch(removeActiveChat(chat.getId()));
+            dispatch(removeOwnChat(chat.getId()));
             navigate("/");
         }
     }
