@@ -55,7 +55,7 @@ const ChatPage = () => {
         getChat().catch(() => navigate("/"));
         setLoading(false);
         
-    }, [chatId, navigate])
+    }, [chatId, navigate, activeChats])
 
     useEffect(() => {
         if (chat !== null && !chat.getMember()) {

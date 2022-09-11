@@ -11,7 +11,6 @@ const ChatsPanel = () => {
     const isAuthenticated = useSelector(state => state.identity.isAuthenticated);
     const ownChats = useSelector(state => state.ownChats.value);
     const chats = useSelector(state => state.chats.value);
-    const activeChats = useSelector(state => state.activeChats.value);
 
     return (
         <>
