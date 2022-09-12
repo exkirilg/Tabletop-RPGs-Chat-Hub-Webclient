@@ -190,7 +190,7 @@ export function useEstablishConnection() {
             disconnect();
         }
 
-    }, [identityIsRestored, connection, processing, connectionIsAuthenticated, isAuthenticated, token, activeChats, dispatch])
+    }, [identityIsRestored, connection, processing, connectionIsAuthenticated, isAuthenticated, token, activeChats, dispatch, navigate])
 
     // Requests on connection
     useEffect(() => {
