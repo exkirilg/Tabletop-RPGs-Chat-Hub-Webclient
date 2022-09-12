@@ -23,8 +23,6 @@ const UserMessage = ({chat, message}) => {
             return "#daeaf1";
         }
     }
-
-    console.log(message.getDicePoolRoll());
     
     return (
         <div className="d-flex">
